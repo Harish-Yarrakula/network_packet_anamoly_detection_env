@@ -1,0 +1,17 @@
+spec_version: 1
+name: network_packet_anomaly_detection
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+title: Network Packet Anomaly Detection
+description: |
+  OpenEnv environment for classifying network packets as normal or anomalous.
+  Three progressive tasks: easy (DDoS detection), medium (multi-attack), hard (adversarial encrypted).
+domain: cybersecurity
+tags:
+  - network-security
+  - anomaly-detection
+  - classification
+  - cybersecurity
+
