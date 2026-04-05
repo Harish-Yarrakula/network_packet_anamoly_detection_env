@@ -28,36 +28,37 @@ class NetworkPacketAction(BaseModel):
 
 class NetworkPacketObservation(BaseModel):
     """Observation from the Network Packet Anomaly Detection environment."""
-    source_ip: str = Field(..., description="Source IP address")
-    dest_ip: str = Field(..., description="Destination IP address")
-    protocol: str = Field(..., description="Protocol (TCP, UDP, ICMP, etc.)")
-    src_port: int = Field(..., ge=0, le=65535, description="Source port")
-    dst_port: int = Field(..., ge=0, le=65535, description="Destination port")
-    packet_size: int = Field(..., description="Packet size in bytes")
-    flags: list = Field(default_factory=list, description="TCP flags")
-    payload_entropy: float = Field(..., ge=0.0, le=8.0, description="Shannon entropy of payload")
-    inter_arrival_time_ms: float = Field(..., description="Time since last packet in ms")
-    attack_type: str = Field(..., description="Ground truth attack type")
-    is_anomaly: bool = Field(..., description="Ground truth: True if malicious")
+    packet_features: dict = Field(default_factory=dict, description="Packet feature dictionary")
+    context: dict = Field(default_factory=dict, description="Context information about the packet")
     packet_number: int = Field(..., description="Packet number in stream")
+    confidence_so_far: float = Field(default=0.0, description="Confidence calibration so far")
     reward: float = Field(default=0.0, description="Reward for last action")
     done: bool = Field(default=False, description="Episode complete")
 
     class Config:
         json_schema_extra = {
             "example": {
-                "source_ip": "192.168.1.100",
-                "dest_ip": "10.0.0.1",
-                "protocol": "TCP",
-                "src_port": 54321,
-                "dst_port": 80,
-                "packet_size": 512,
-                "flags": ["SYN"],
-                "payload_entropy": 6.5,
-                "inter_arrival_time_ms": 0.5,
-                "attack_type": "normal",
-                "is_anomaly": False,
+                "packet_features": {
+                    "source_ip": "192.168.1.100",
+                    "dest_ip": "10.0.0.1",
+                    "protocol": "TCP",
+                    "src_port": 54321,
+                    "dst_port": 80,
+                    "packet_size": 512,
+                    "flags": ["SYN"],
+                    "payload_entropy": 6.5,
+                    "inter_arrival_time_ms": 0.5,
+                    "attack_type": "normal",
+                    "is_anomaly": False
+                },
+                "context": {
+                    "packet_number": 1,
+                    "recent_packets_from_src": 2,
+                    "recent_packets_to_dst": 1,
+                    "is_first_packet_to_dst": True
+                },
                 "packet_number": 1,
+                "confidence_so_far": 0.0,
                 "reward": 0.0,
                 "done": False
             }
