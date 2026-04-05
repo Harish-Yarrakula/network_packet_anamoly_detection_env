@@ -169,14 +169,8 @@ class NetworkPacketAnomalyDetectionEnvironment(Environment):
                 context={},
                 packet_number=self._current_packet_index,
                 confidence_so_far=self._cumulative_reward / len(self._classifications),
-                ground_truth_label=None,
                 done=True,
                 reward=reward,
-                metadata={
-                    "episode_finished": True,
-                    "total_packets": len(self._packets),
-                    "total_reward": self._cumulative_reward,
-                },
             )
             return obs
 
